@@ -9,7 +9,7 @@ function Home() {
   const [volume, setVolume] = useState(20);
   const [stop, setStop] = useState();
 
-
+  //dropdown part - spinner or whatever
   function onButtonOptionClick(event) {
     event.preventDefault();
     setLoop(event.target.value);
@@ -25,14 +25,51 @@ function Home() {
     }))
   );
 
+  const dropdown = (
+    <div className="dropdown d-flex justify-content-around">
+      <button className="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+        <span className="mx-2">{"Choose Repeat: " + loop}</span>
+      </button>
+      <div className="dropdown-menu">
+        {buttonOptions}
+      </div>
+    </div>
+  );
+
+  //input part - slider or seekbar, whatever
+  function handleVolumeChange(event) {
+    event.preventDefault();
+    setVolume(event.target.value);
+  }
+
+  const input = (
+    <div className="mt-5 container col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
+      <p className="text-center">{"Volume: " + volume/100}</p>
+      <input className="custom-range" type="range" min="0" max="100" value={volume}
+             onChange={handleVolumeChange}/>
+    </div>
+  );
+
+  //for sound buttons and stop button
+  const box = (children)=>{
+    return (
+      <div className="mt-5 container d-flex justify-content-around
+                      col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
+        {children}
+      </div>
+    )
+  };
+
+  //sound buttons part
   function onButtonSoundClick(event) {
     event.preventDefault();
+    clearInterval(stop);
     const audio = new Audio(event.target.value);
-    audio.volume = volume/100;
     let times = loop;
     const looper = setInterval(()=>{
       times--;
       if (times === 0) clearInterval(looper);
+      audio.volume = volume/100;
       audio.play().catch(err=>console.log(err));
     }, 500);
     setStop(looper);
@@ -48,45 +85,24 @@ function Home() {
     })
   );
 
-  function handleVolumeChange(event) {
-    event.preventDefault();
-    setVolume(event.target.value);
-  }
-
+  //stop button part
   function onStopClick(event) {
     event.preventDefault();
     clearInterval(stop);
   }
 
+  const buttonStop = (
+    <button className="btn btn-outline-success" onClick={onStopClick}>
+      Stop
+    </button>
+  );
+
   return (
     <div className="container mt-3">
-      <div className="dropdown d-flex justify-content-around">
-        <button className="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
-          <span className="mx-2">{"Choose Repeat: " + loop}</span>
-        </button>
-        <div className="dropdown-menu">
-          {buttonOptions}
-        </div>
-      </div>
-
-      <div className="mt-5 container col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-        <p className="text-center">{"Volume: " + volume/100}</p>
-        <input className="custom-range" type="range" min="0" max="100" value={volume}
-               onChange={handleVolumeChange}/>
-      </div>
-
-      <div className="mt-5 container d-flex justify-content-around
-                      col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-        {buttonSounds}
-      </div>
-
-      <div className="mt-5 container d-flex justify-content-around
-                      col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-        <button className="btn btn-outline-success" onClick={onStopClick}>
-          Stop
-        </button>
-      </div>
-
+      {dropdown}
+      {input}
+      {box(buttonSounds)}
+      {box(buttonStop)}
     </div>
   )
 }
