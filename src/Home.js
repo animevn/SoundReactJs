@@ -1,17 +1,18 @@
 import React, {useState} from "react";
 import "bootstrap/js/dist/dropdown";
 
-const options = [1, 2, 3, 4, 5];
+const options = [1, 2, 3, 6, 10];
 const sounds = ["sound/fx1.ogg", "sound/fx2.ogg", "sound/fx3.ogg"];
 
 function Home() {
-  const [loop, setState] = useState(1);
+  const [loop, setLoop] = useState(1);
   const [volume, setVolume] = useState(20);
+  const [stop, setStop] = useState();
 
 
   function onButtonOptionClick(event) {
     event.preventDefault();
-    setState(event.target.value);
+    setLoop(event.target.value);
   }
 
   const buttonOptions = (
@@ -29,12 +30,12 @@ function Home() {
     const audio = new Audio(event.target.value);
     audio.volume = volume/100;
     let times = loop;
-    const looper = setInterval(repeat, 500);
-    function repeat() {
+    const looper = setInterval(()=>{
       times--;
       if (times === 0) clearInterval(looper);
       audio.play().catch(err=>console.log(err));
-    }
+    }, 500);
+    setStop(looper);
   }
 
   const buttonSounds = (
@@ -50,6 +51,11 @@ function Home() {
   function handleVolumeChange(event) {
     event.preventDefault();
     setVolume(event.target.value);
+  }
+
+  function onStopClick(event) {
+    event.preventDefault();
+    clearInterval(stop);
   }
 
   return (
@@ -76,7 +82,9 @@ function Home() {
 
       <div className="mt-5 container d-flex justify-content-around
                       col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-        <button className="btn btn-outline-success">Stop</button>
+        <button className="btn btn-outline-success" onClick={onStopClick}>
+          Stop
+        </button>
       </div>
 
     </div>
