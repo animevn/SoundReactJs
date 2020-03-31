@@ -8,6 +8,7 @@ function Home() {
   const [loop, setLoop] = useState(1);
   const [volume, setVolume] = useState(20);
   const [stop, setStop] = useState();
+  const [sound, setSound] = useState();
 
   //dropdown part - spinner or whatever
   function onButtonOptionClick(event) {
@@ -16,13 +17,13 @@ function Home() {
   }
 
   const buttonOptions = (
-    options.map((value => {
+    options.map((value, index) => {
       return (
-        <button className="btn dropdown-item" onClick={onButtonOptionClick} value={value}>
+        <button key={index} className="btn dropdown-item" onClick={onButtonOptionClick} value={value}>
           {value}
         </button>
       )
-    }))
+    })
   );
 
   const dropdown = (
@@ -40,6 +41,7 @@ function Home() {
   function handleVolumeChange(event) {
     event.preventDefault();
     setVolume(event.target.value);
+    sound.volume = volume/100;
   }
 
   const input = (
@@ -65,20 +67,23 @@ function Home() {
     event.preventDefault();
     clearInterval(stop);
     const audio = new Audio(event.target.value);
+    audio.volume = volume/100;
     let times = loop;
     const looper = setInterval(()=>{
       times--;
       if (times === 0) clearInterval(looper);
-      audio.volume = volume/100;
+      setSound(audio);
       audio.play().catch(err=>console.log(err));
     }, 500);
     setStop(looper);
+    setSound(null);
   }
 
   const buttonSounds = (
     sounds.map((value, index) => {
       return (
-        <button className="btn btn-outline-success" onClick={onButtonSoundClick} value={value}>
+        <button key={index} className="btn btn-outline-success"
+                onClick={onButtonSoundClick} value={value}>
           {"Sound " + (index + 1)}
         </button>
       )
