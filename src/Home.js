@@ -41,7 +41,7 @@ function Home() {
   function handleVolumeChange(event) {
     event.preventDefault();
     setVolume(event.target.value);
-    sound.volume = volume/100;
+    if (sound != null) sound.volume = volume/100;
   }
 
   const input = (
