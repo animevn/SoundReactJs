@@ -61,9 +61,8 @@ function Home() {
 
   //sound buttons part
   function onButtonSoundClick(event) {
-    event.preventDefault();
     clearInterval(stop);
-    const audio = new Audio(event.target.value);
+    const audio = new Audio(event.currentTarget.value);
     audio.volume = volume/100;
     let times = loop;
     const looper = setInterval(()=>{
