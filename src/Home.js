@@ -1,5 +1,10 @@
 import React, {useState} from "react";
 import Grid from "@material-ui/core/Grid";
+import Select from "@material-ui/core/Select";
+import {Box} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Slider from "@material-ui/core/Slider";
 
 const options = [1, 2, 3, 6, 10];
 const sounds = ["sound/fx1.ogg", "sound/fx2.ogg", "sound/fx3.ogg"];
@@ -11,46 +16,48 @@ function Home() {
   const [stop, setStop] = useState();
   const [sound, setSound] = useState();
 
-  //dropdown part - spinner or whatever
-  function onButtonOptionClick(event) {
-    event.preventDefault();
+  //select part - spinner or whatever
+  function handleSelectChange(event) {
     setLoop(event.target.value);
   }
 
-  const buttonOptions = (
+  const selectOptions = (
     options.map((value, index) => {
       return (
-        <button key={index} className="btn dropdown-item" onClick={onButtonOptionClick} value={value}>
-          {value}
-        </button>
+        <option key={index} value={value}>{value}</option>
       )
     })
   );
 
-  const dropdown = (
-    <div className="dropdown d-flex justify-content-around">
-      <button className="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
-        <span className="mx-2">{"Choose Repeat: " + loop}</span>
-      </button>
-      <div className="dropdown-menu">
-        {buttonOptions}
-      </div>
-    </div>
+  const select = (
+    <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
+
+      <Box display="flex" flexDirection="row" justifyContent="center">
+        <Typography>Number Of Loops</Typography>
+      </Box>
+
+      <Box display="flex" flexDirection="row" justifyContent="center" mt={1} width={200}>
+        <Select native style={{"width":"6rem"}} variant="outlined"
+                value={loop} onChange={handleSelectChange} >
+          {selectOptions}
+        </Select>
+      </Box>
+
+    </Box>
   );
 
   //input part - slider or seekbar, whatever
-  function handleVolumeChange(event) {
-    event.preventDefault();
-    setVolume(event.target.value);
+  function handleVolumeChange(event, value) {
+    setVolume(value);
     if (sound != null) sound.volume = volume/100;
   }
 
   const input = (
-    <div className="mt-5 container col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-      <p className="text-center">{"Volume: " + volume/100}</p>
-      <input className="custom-range" type="range" min="0" max="100" value={volume}
-             onChange={handleVolumeChange}/>
-    </div>
+    <Box px={10} mt={5}>
+
+      <Slider valueLabelDisplay="auto" min={0} max={100}
+              value={volume} onChange={handleVolumeChange} />
+    </Box>
   );
 
   //for sound buttons and stop button
@@ -106,7 +113,7 @@ function Home() {
   return (
     <Grid container direction="row" justify="center">
       <Grid item {...width}>
-        {dropdown}
+        {select}
         {input}
         {box(buttonSounds)}
         {box(buttonStop)}
