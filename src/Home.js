@@ -1,7 +1,9 @@
 import React, {useState} from "react";
+import Grid from "@material-ui/core/Grid";
 
 const options = [1, 2, 3, 6, 10];
 const sounds = ["sound/fx1.ogg", "sound/fx2.ogg", "sound/fx3.ogg"];
+const width = {xs:11, sm:8, md:6, lg:5, xl:4};
 
 function Home() {
   const [loop, setLoop] = useState(1);
@@ -102,12 +104,14 @@ function Home() {
   );
 
   return (
-    <div className="container mt-3">
-      {dropdown}
-      {input}
-      {box(buttonSounds)}
-      {box(buttonStop)}
-    </div>
+    <Grid container direction="row" justify="center">
+      <Grid item {...width}>
+        {dropdown}
+        {input}
+        {box(buttonSounds)}
+        {box(buttonStop)}
+      </Grid>
+    </Grid>
   )
 }
 
