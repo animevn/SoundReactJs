@@ -54,21 +54,10 @@ function Home() {
 
   const input = (
     <Box px={10} mt={5}>
-
       <Slider valueLabelDisplay="auto" min={0} max={100}
               value={volume} onChange={handleVolumeChange} />
     </Box>
   );
-
-  //for sound buttons and stop button
-  const box = (children)=>{
-    return (
-      <div className="mt-5 container d-flex justify-content-around
-                      col-xl-6 col-lg-7 col-md-9 col-sm-11 col-11">
-        {children}
-      </div>
-    )
-  };
 
   //sound buttons part
   function onButtonSoundClick(event) {
@@ -88,14 +77,17 @@ function Home() {
   }
 
   const buttonSounds = (
-    sounds.map((value, index) => {
-      return (
-        <button key={index} className="btn btn-outline-success"
-                onClick={onButtonSoundClick} value={value}>
-          {"Sound " + (index + 1)}
-        </button>
-      )
-    })
+    <Box display="flex" flexDirection="row" justifyContent="space-evenly"
+         mt={5}>
+      {sounds.map((value, index) => {
+          return (
+            <Button key={index} variant="outlined" color="secondary"
+                    onClick={onButtonSoundClick} value={value}>
+              {"Sound " + (index + 1)}
+            </Button>
+          )
+      })}
+    </Box>
   );
 
   //stop button part
@@ -105,9 +97,11 @@ function Home() {
   }
 
   const buttonStop = (
-    <button className="btn btn-outline-success" onClick={onStopClick}>
-      Stop
-    </button>
+    <Box mt={5} display="flex" flexDirection="row" justifyContent="center">
+      <Button variant="outlined" color="secondary" onClick={onStopClick}>
+        Stop
+      </Button>
+    </Box>
   );
 
   return (
@@ -115,8 +109,8 @@ function Home() {
       <Grid item {...width}>
         {select}
         {input}
-        {box(buttonSounds)}
-        {box(buttonStop)}
+        {buttonSounds}
+        {buttonStop}
       </Grid>
     </Grid>
   )
