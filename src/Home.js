@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import "bootstrap/js/dist/dropdown";
 
 const options = [1, 2, 3, 6, 10];
 const sounds = ["sound/fx1.ogg", "sound/fx2.ogg", "sound/fx3.ogg"];
